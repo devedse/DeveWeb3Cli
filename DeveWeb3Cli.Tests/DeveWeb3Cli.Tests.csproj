@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DeveWeb3Cli\DeveWeb3Cli.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="ExampleData\build-info-EthernalLock.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

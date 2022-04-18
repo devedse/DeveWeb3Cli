@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
@@ -49,25 +50,27 @@ namespace DeveWeb3Cli.Commands.Contract.Deploy
                 }
             }
 
-            var account = new Account(PrivateKey, Nethereum.Signer.Chain.Ropsten);
+            var account = new Account(PrivateKey, GetChainId());
             var web3 = new Web3(account, RpcUrl);
 
-
-
-            var transactionHash = await web3.Eth.DeployContract.SendRequestAsync(byteCode, account.Address);
-            Console.WriteLine($"TransactionHash: {transactionHash}");
-
-
-            Console.WriteLine("Waiting for receipt...");
-            TransactionReceipt receipt;
-            do
+            try
             {
-                receipt = await web3.Eth.Transactions.GetTransactionReceipt.SendRequestAsync(transactionHash);
-                await Task.Delay(5000);
-            }
-            while (receipt == null);
+                var currentCoins = await web3.Eth.GetBalance.SendRequestAsync(account.Address);
 
-            Console.WriteLine($"ContractAddress: {receipt.ContractAddress}");
+                var gasEstimate = await web3.Eth.DeployContract.EstimateGasAsync("", byteCode, account.Address);
+                var transactionHash = await web3.Eth.DeployContract.SendRequestAsync(byteCode, account.Address, new HexBigInteger(gasEstimate));
+                Console.WriteLine($"TransactionHash: {transactionHash}");
+
+                var receipt = await BlockchainService.WaitForReceipt(web3, transactionHash);
+
+                Console.WriteLine($"ContractAddress: {receipt.ContractAddress}");
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
+
+
     }
 }

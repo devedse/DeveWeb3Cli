@@ -46,9 +46,11 @@ namespace DeveWeb3Cli
 
         private static async Task ExecuteCommand(object arg)
         {
-            var command = (CommandBase)arg;
+            CommandBase command;
             try
             {
+                command = (CommandBase)arg;
+
                 // The kernel will inject dependencies to the command.
                 kernel.Inject(command);
             }

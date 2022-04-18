@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Nethereum.Signer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,24 @@ namespace DeveWeb3Cli.CommandHelpers
         // Properties shared by all commands...
         [Option('v', "verbose", HelpText = "Print details during execution.")]
         public bool Verbose { get; set; }
+
+        [Option('n', "network", Env = "WEB3_NETWORK", Default = "1337", HelpText = "The name of the network. Options: <chainId>, MainNet, Morden, Ropsten, Rinkeby, RootstockMainNet, RootstockTestNet, Kovan, ClassicMainNet, ClassicTestNet, Private. (default: \"1337\") [$WEB3_NETWORK]")]
+        public string Network { get; set; }
+
+        protected int GetChainId()
+        {
+            if (int.TryParse(Network, out var chainId))
+            {
+                return chainId;
+            }
+            var chains = Enum.GetValues<Chain>();
+            var foundChains = chains.Where(t => t.ToString().Equals(Network, StringComparison.OrdinalIgnoreCase)).ToList();
+            if (!foundChains.Any())
+            {
+                throw new ArgumentException($"Could not find chain with name: {Network}");
+            }
+            return (int)foundChains.First();
+        }
 
         //// Components shared by all commands... you can inject a database connection etc.
         //[Inject]
