@@ -1,8 +1,8 @@
 ﻿using CommandLine;
 using Nethereum.Hex.HexTypes;
-using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
+using Newtonsoft.Json;
 using System.Text.Json;
 
 namespace DeveWeb3Cli.Commands.Contract.Deploy
@@ -17,7 +17,7 @@ namespace DeveWeb3Cli.Commands.Contract.Deploy
         public int TimeoutInSeconds { get; set; }
 
         [Value(1, Required = true)]
-        public string ContractFileName { get; set; } = null!;
+        public string ContractFilePath { get; set; } = null!;
 
         [Value(2, Required = false)]
         public IEnumerable<string>? Data { get; set; }
@@ -34,14 +34,14 @@ namespace DeveWeb3Cli.Commands.Contract.Deploy
                 throw new ArgumentException("rpc-url field should have been provided.");
             }
 
-            if (!File.Exists(ContractFileName))
+            if (!File.Exists(ContractFilePath))
             {
-                throw new ArgumentException($"Could not find file in path {ContractFileName}");
+                throw new ArgumentException($"Could not find file in path {ContractFilePath}");
             }
 
-            var byteCode = File.ReadAllText(ContractFileName);
+            var byteCode = File.ReadAllText(ContractFilePath);
 
-            if (Path.GetExtension(ContractFileName).Equals(".json", StringComparison.OrdinalIgnoreCase))
+            if (Path.GetExtension(ContractFilePath).Equals(".json", StringComparison.OrdinalIgnoreCase))
             {
                 using (var document = JsonDocument.Parse(byteCode))
                 {
@@ -54,12 +54,23 @@ namespace DeveWeb3Cli.Commands.Contract.Deploy
             var web3 = new Web3(account, RpcUrl);
 
             var gasEstimate = await web3.Eth.DeployContract.EstimateGasAsync("", byteCode, account.Address);
-            var transactionHash = await web3.Eth.DeployContract.SendRequestAsync(byteCode, account.Address, new HexBigInteger(gasEstimate));
+            var transactionHash = await web3.Eth.DeployContract.SendRequestAsync(byteCode, account.Address, new HexBigInteger(gasEstimate), new HexBigInteger(0));
             Console.WriteLine($"TransactionHash: {transactionHash}");
 
             var receipt = await BlockchainService.WaitForReceipt(web3, transactionHash);
 
             Console.WriteLine($"ContractAddress: {receipt.ContractAddress}");
+
+            if (receipt.HasErrors() == true)
+            {
+                throw new InvalidOperationException($"Error while executing transaction with hash: {transactionHash}");
+            }
+
+            if (!string.IsNullOrEmpty(OutputJsonPath))
+            {
+                var jsonTxt = JsonConvert.SerializeObject(receipt, Formatting.Indented);
+                File.WriteAllText(OutputJsonPath, jsonTxt);
+            }
         }
     }
 }
