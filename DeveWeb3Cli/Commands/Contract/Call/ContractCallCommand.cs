@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using Nethereum.ABI;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
@@ -109,16 +108,13 @@ namespace DeveWeb3Cli.Commands.Contract.Call
                     var dataObject = dataAsList[i];
 
                     var abiType = parameter.ABIType;
-                    theData.Add(abiType.Name, JToken.FromObject(dataObject));
+                    theData.Add(parameter.Name, dataObject);
                 }
 
                 data = theFunction.ConvertJsonToObjectInputParameters(theData);
             }
 
-
-
-
-            var gasEstimate = await theFunction.EstimateGasAsync(data);
+            var gasEstimate = await theFunction.EstimateGasAsync(account.Address, new HexBigInteger(6000000), new HexBigInteger(0), data);
             var transactionHash = await theFunction.SendTransactionAsync(account.Address, new HexBigInteger(gasEstimate), new HexBigInteger(0), data);
             Console.WriteLine($"TransactionHash: {transactionHash}");
 
