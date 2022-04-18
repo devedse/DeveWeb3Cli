@@ -53,24 +53,13 @@ namespace DeveWeb3Cli.Commands.Contract.Deploy
             var account = new Account(PrivateKey, GetChainId());
             var web3 = new Web3(account, RpcUrl);
 
-            try
-            {
-                var currentCoins = await web3.Eth.GetBalance.SendRequestAsync(account.Address);
+            var gasEstimate = await web3.Eth.DeployContract.EstimateGasAsync("", byteCode, account.Address);
+            var transactionHash = await web3.Eth.DeployContract.SendRequestAsync(byteCode, account.Address, new HexBigInteger(gasEstimate));
+            Console.WriteLine($"TransactionHash: {transactionHash}");
 
-                var gasEstimate = await web3.Eth.DeployContract.EstimateGasAsync("", byteCode, account.Address);
-                var transactionHash = await web3.Eth.DeployContract.SendRequestAsync(byteCode, account.Address, new HexBigInteger(gasEstimate));
-                Console.WriteLine($"TransactionHash: {transactionHash}");
+            var receipt = await BlockchainService.WaitForReceipt(web3, transactionHash);
 
-                var receipt = await BlockchainService.WaitForReceipt(web3, transactionHash);
-
-                Console.WriteLine($"ContractAddress: {receipt.ContractAddress}");
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            Console.WriteLine($"ContractAddress: {receipt.ContractAddress}");
         }
-
-
     }
 }
