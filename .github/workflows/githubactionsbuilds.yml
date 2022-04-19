@@ -116,10 +116,7 @@ jobs:
       run: find
 
     - name: FindCommand 2
-      run: find / -type f -name "*.xml"
-
-    - name: FindCommand 3
-      run: find /
+      run: find ./ -type f -name "*.xml"
 
     - name: Run CodeCov #codecov -f ".\DeveWeb3Cli.Tests\TestResults\Coverage\coverage.opencover.xml"
       uses: codecov/codecov-action@v2
