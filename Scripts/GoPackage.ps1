@@ -8,14 +8,14 @@ $powerShellHelpersModule = Join-Path $directorypath "PowerShellHelpers"
 Import-Module -Name $powerShellHelpersModule
 
 $outputDir = Join-Path $directorypath "Output"
-$7zFilePath = Join-Path $outputDir "DeveCoolLib.7z"
-$zipFilePath = Join-Path $outputDir "DeveCoolLib.zip"
+$7zFilePath = Join-Path $outputDir "DeveWeb3Cli.7z"
+$zipFilePath = Join-Path $outputDir "DeveWeb3Cli.zip"
 
 DeleteFileIfExists $7zFilePath
 DeleteFileIfExists $zipFilePath
 DeleteFolderIfExists $outputDir
 
-$buildPath = Join-Path $solutionRoot "DeveCoolLib\bin\Release\net6.0"
+$buildPath = Join-Path $solutionRoot "DeveWeb3Cli\bin\Release\net6.0"
 
 # Exclude *.pdb files
 7z a -mm=Deflate -mfb=258 -mpass=15 "$zipFilePath" "$buildPath\*" '-x!*.pdb'
