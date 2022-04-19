@@ -111,12 +111,6 @@ jobs:
       run: dotnet-sonarscanner end /d:sonar.login=${{secrets.SONARQUBETOKEN}}
     - name: Pack
       run: dotnet pack DeveWeb3Cli/DeveWeb3Cli.csproj --verbosity normal --no-build -c Release /p:Version=1.0.${{needs.generate_version_number.outputs.build_number}}
- 
-    - name: FindCommand 1
-      run: find
-
-    - name: FindCommand 2
-      run: find ./ -type f -name "*.xml"
 
     - name: Run CodeCov #codecov -f ".\DeveWeb3Cli.Tests\TestResults\Coverage\coverage.opencover.xml"
       uses: codecov/codecov-action@v2
@@ -125,7 +119,7 @@ jobs:
         files: DeveWeb3Cli.Tests/TestResults/*/coverage.opencover.xml # optional
         #flags: unittests # optional
         #name: codecov-umbrella # optional
-        #fail_ci_if_error: true # optional (default = false)
+        fail_ci_if_error: true # optional (default = false)
         verbose: true # optional (default = false)
 
     - name: Run GoPackage.ps1 script
