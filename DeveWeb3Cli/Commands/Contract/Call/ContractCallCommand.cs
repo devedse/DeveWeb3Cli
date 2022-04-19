@@ -4,12 +4,15 @@ using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace DeveWeb3Cli.Commands.Contract.Call
 {
     [Verb("call", HelpText = "Call contract function")]
     public class ContractCallCommand : ContractCommand
     {
+        public static readonly Regex TheStringSplitterRegex = new Regex("(?<=\")[^\"]*(?=\")|[^\" ]+", RegexOptions.Compiled);
+
         [Option("private-key", Env = "WEB3_PRIVATE_KEY", Required = false, HelpText = "The private key [$WEB3_PRIVATE_KEY]")]
         public string? PrivateKey { get; set; }
 
@@ -84,11 +87,13 @@ namespace DeveWeb3Cli.Commands.Contract.Call
             {
                 var jsonData = File.ReadAllText(JsonDataFilePath);
 
-                data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
+                //data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
+                data = DeveWeb3Cli.Helpers.JsonParameterObjectConvertorTestje.ConvertToFunctionInputParameterValues(jsonData, contract.ContractBuilder.GetFunctionBuilder(Function).FunctionABI);
             }
             else if (Data != null && Data.Any())
             {
-                var dataAsList = Data.ToList();
+                var dataString = string.Join(" ", Data);
+                var dataAsList = TheStringSplitterRegex.Matches(dataString).Cast<Match>().Select(m => m.Value).ToList();
 
                 var functionBuilder = contract.ContractBuilder.GetFunctionBuilder(Function);
                 var functionAbi = functionBuilder.FunctionABI;
@@ -101,17 +106,19 @@ namespace DeveWeb3Cli.Commands.Contract.Call
                 }
 
 
-                var theData = new JObject();
+                var jsonData = new JObject();
                 for (int i = 0; i < parametersInOrder.Count; i++)
                 {
                     var parameter = parametersInOrder[i];
                     var dataObject = dataAsList[i];
 
                     var abiType = parameter.ABIType;
-                    theData.Add(parameter.Name, dataObject);
+                    var val = JValue.Parse(dataObject);
+                    jsonData.Add(parameter.Name, val);
                 }
 
-                data = theFunction.ConvertJsonToObjectInputParameters(theData);
+                //data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
+                data = DeveWeb3Cli.Helpers.JsonParameterObjectConvertorTestje.ConvertToFunctionInputParameterValues(jsonData, contract.ContractBuilder.GetFunctionBuilder(Function).FunctionABI);
             }
 
             var gasEstimate = await theFunction.EstimateGasAsync(account.Address, new HexBigInteger(6000000), new HexBigInteger(0), data);

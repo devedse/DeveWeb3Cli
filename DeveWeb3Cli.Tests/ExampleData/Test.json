@@ -1,0 +1,69 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Test",
+  "sourceName": "contracts/Test.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "number",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint8",
+              "name": "R",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "G",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "B",
+              "type": "uint8"
+            }
+          ],
+          "internalType": "struct Test.Color",
+          "name": "backgroundColor",
+          "type": "tuple"
+        }
+      ],
+      "name": "create",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "theBackgroundColor",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "R",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "G",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "B",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50610208806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c806326f457961461003b5780633270284d14610050575b600080fd5b61004e6100493660046100ad565b610095565b005b6000546100709060ff808216916101008104821691620100009091041683565b6040805160ff9485168152928416602084015292168183015290519081900360600190f35b60018290558060006100a7828261011c565b50505050565b60008082840360808112156100c157600080fd5b8335925060607fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0820112156100f557600080fd5b506020830190509250929050565b6000813560ff8116811461011657600080fd5b92915050565b60ff61012783610103565b168154817fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00821617835561ff0061016060208601610103565b60081b1680837fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000084161717845562ff000061019d60408701610103565b60101b16837fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000008416178217178455505050505056fea2646970667358221220f2d106e816451478bcab753a799b85500b4f7ed79c47ed05324920bbe4a919dd64736f6c634300080d0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c806326f457961461003b5780633270284d14610050575b600080fd5b61004e6100493660046100ad565b610095565b005b6000546100709060ff808216916101008104821691620100009091041683565b6040805160ff9485168152928416602084015292168183015290519081900360600190f35b60018290558060006100a7828261011c565b50505050565b60008082840360808112156100c157600080fd5b8335925060607fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0820112156100f557600080fd5b506020830190509250929050565b6000813560ff8116811461011657600080fd5b92915050565b60ff61012783610103565b168154817fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00821617835561ff0061016060208601610103565b60081b1680837fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000084161717845562ff000061019d60408701610103565b60101b16837fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000008416178217178455505050505056fea2646970667358221220f2d106e816451478bcab753a799b85500b4f7ed79c47ed05324920bbe4a919dd64736f6c634300080d0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

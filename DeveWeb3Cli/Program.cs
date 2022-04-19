@@ -14,6 +14,13 @@ namespace DeveWeb3Cli
 
         public static async Task<int> Main(string[] args)
         {
+            for (int i = 0; i < args.Length; i++)
+            {
+                var arg = args[i];
+                Console.WriteLine($"{i}: >{arg}<");
+            }
+
+
             // Composition root is here... we load the injector and modules
             // Business behavior is determined by modules, so commands stay loosely coupled.
             kernel = new StandardKernel(new AppModule());
