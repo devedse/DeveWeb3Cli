@@ -4,6 +4,7 @@ using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -103,7 +104,13 @@ namespace DeveWeb3Cli.Commands.Contract.Call
 
                 if (parametersInOrder.Count != dataAsList.Count)
                 {
-                    throw new ArgumentException($"Expected {parametersInOrder.Count} elements in Data, but got: {dataAsList.Count}");
+                    var sb = new StringBuilder();
+                    for (int i = 0; i < dataAsList.Count; i++)
+                    {
+                        sb.AppendLine($"{i}: {dataAsList[i]}");
+                    }
+                    Console.WriteLine($"Data as string: >{dataString}<");
+                    throw new ArgumentException($"Expected {parametersInOrder.Count} elements in Data, but got: {dataAsList.Count}{Environment.NewLine}{sb}");
                 }
 
 
