@@ -103,7 +103,7 @@ jobs:
     - name: dotnet build
       run: dotnet build DeveWeb3Cli.sln -c Release --no-restore /p:Version=1.0.${{needs.generate_version_number.outputs.build_number}}
     - name: dotnet test
-      run: dotnet test DeveWeb3Cli.sln --verbosity normal --no-build -c Release /p:CollectCoverage=true /p:CoverletOutputFormat="cobertura,opencover" /p:CoverletOutput=./TestResults/Coverage/
+      run: dotnet test DeveWeb3Cli.sln --verbosity normal --no-build -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=\"cobertura,opencover\" /p:CoverletOutput=./TestResults/Coverage/
     - name: SonarQube end
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
