@@ -11,7 +11,7 @@ namespace DeveWeb3Cli.Tests.TestHelpers
 
         public static string ToAbsPath(this string relativePath)
         {
-            var relativePathWithRightPathSeparator = relativePath.Replace('\\', Path.PathSeparator).Replace('/', Path.PathSeparator);
+            var relativePathWithRightPathSeparator = relativePath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
 
             var curAssembly = Assembly.GetAssembly(typeof(TestPathHelpers))!.Location;
             var curDir = Path.GetDirectoryName(curAssembly);
