@@ -85,7 +85,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
 
 
                 var tempFileDataInput = TempFile.Create(".json");
-                File.WriteAllText(tempFileDataInput, "{'lockIndex': '2', 'backgroundColor': { 'R': 128, 'G': 100, 'B': 12 } }");
+                File.WriteAllText(tempFileDataInput, "{ 'number': '2', 'backgroundColor': { 'R': 128, 'G': 100, 'B': 12 } }");
 
 
                 string args2 = @$"contract call --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --address {transactionReceipt.ContractAddress} --abi ExampleData\Test.json --function create --jsondatafilepath {tempFileDataInput}";

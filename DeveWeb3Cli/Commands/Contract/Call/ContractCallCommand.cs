@@ -87,8 +87,8 @@ namespace DeveWeb3Cli.Commands.Contract.Call
             {
                 var jsonData = File.ReadAllText(JsonDataFilePath);
 
-                //data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
-                data = DeveWeb3Cli.Helpers.JsonParameterObjectConvertorTestje.ConvertToFunctionInputParameterValues(jsonData, contract.ContractBuilder.GetFunctionBuilder(Function).FunctionABI);
+                data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
+                //data = DeveWeb3Cli.Helpers.JsonParameterObjectConvertorTestje.ConvertToFunctionInputParameterValues(jsonData, contract.ContractBuilder.GetFunctionBuilder(Function).FunctionABI);
             }
             else if (Data != null && Data.Any())
             {
@@ -117,8 +117,8 @@ namespace DeveWeb3Cli.Commands.Contract.Call
                     jsonData.Add(parameter.Name, val);
                 }
 
-                //data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
-                data = DeveWeb3Cli.Helpers.JsonParameterObjectConvertorTestje.ConvertToFunctionInputParameterValues(jsonData, contract.ContractBuilder.GetFunctionBuilder(Function).FunctionABI);
+                data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
+                //data = DeveWeb3Cli.Helpers.JsonParameterObjectConvertorTestje.ConvertToFunctionInputParameterValues(jsonData, contract.ContractBuilder.GetFunctionBuilder(Function).FunctionABI);
             }
 
             var gasEstimate = await theFunction.EstimateGasAsync(account.Address, new HexBigInteger(6000000), new HexBigInteger(0), data);
