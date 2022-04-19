@@ -99,12 +99,12 @@ jobs:
     - name: dotnet restore
       run: dotnet restore DeveWeb3Cli.sln
     - name: SonarQube begin
-      run: dotnet-sonarscanner begin /k:"DeveWeb3Cli" /o:"devedse-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=${{secrets.SONARQUBETOKEN}} /d:sonar.cs.opencover.reportsPaths=".\DeveWeb3Cli.Tests\TestResults\Coverage\coverage.opencover.xml" /d:sonar.coverage.exclusions="DeveWeb3Cli.Tests/**/*.cs"
+      run: dotnet-sonarscanner begin /k:"DeveWeb3Cli" /o:"devedse-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=${{secrets.SONARQUBETOKEN}} /d:sonar.cs.opencover.reportsPaths="./DeveWeb3Cli.Tests/TestResults/Coverage*/coverage.opencover.xml" /d:sonar.coverage.exclusions="DeveWeb3Cli.Tests/**/*.cs"
     - name: dotnet build
       run: dotnet build DeveWeb3Cli.sln -c Release --no-restore /p:Version=1.0.${{needs.generate_version_number.outputs.build_number}}
     - name: dotnet test
       #run: dotnet test DeveWeb3Cli.sln --verbosity normal --no-build -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=\"cobertura,opencover\" /p:CoverletOutput=./TestResults/Coverage/
-      run: dotnet test DeveWeb3Cli.sln --verbosity normal --no-build -c Release --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover --results-directory:"./TestResults/Coverage/"
+      run: dotnet test DeveWeb3Cli.sln --verbosity normal --no-build -c Release --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover
     - name: SonarQube end
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -122,7 +122,7 @@ jobs:
       uses: codecov/codecov-action@v2
       with:
         #token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-        files: ./DeveWeb3Cli.Tests/TestResults/Coverage/coverage.opencover.xml # optional
+        files: ./DeveWeb3Cli.Tests/TestResults/*/coverage.opencover.xml # optional
         #flags: unittests # optional
         #name: codecov-umbrella # optional
         #fail_ci_if_error: true # optional (default = false)
