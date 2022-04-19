@@ -2,6 +2,7 @@
 using Nethereum.Hex.HexTypes;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -130,6 +131,12 @@ namespace DeveWeb3Cli.Commands.Contract.Call
             if (receipt.HasErrors() == true)
             {
                 throw new InvalidOperationException($"Error while executing transaction with hash: {transactionHash}");
+            }
+
+            if (!string.IsNullOrEmpty(OutputJsonPath))
+            {
+                var jsonTxt = JsonConvert.SerializeObject(receipt, Formatting.Indented);
+                File.WriteAllText(OutputJsonPath, jsonTxt);
             }
         }
     }
