@@ -62,9 +62,9 @@ jobs:
         docker buildx build -f DeveWeb3Cli/Dockerfile --build-arg BUILD_VERSION=$VERSION --platform linux/arm64,linux/amd64 -t devedse/deveweb3cli:${{needs.generate_version_number.outputs.build_number}} -t devedse/deveweb3cli:latest --push .
 
   
-  build_linux:
+  build_windows:
     needs: generate_version_number
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -75,12 +75,12 @@ jobs:
       run: dotnet restore DeveWeb3Cli.sln
     - name: dotnet build
       run: dotnet build DeveWeb3Cli.sln -c Release --no-restore /p:Version=1.0.${{needs.generate_version_number.outputs.build_number}}
-    - name: dotnet test
-      run: dotnet test DeveWeb3Cli.sln -c Release --no-build --verbosity normal
+    # - name: dotnet test
+    #   run: dotnet test DeveWeb3Cli.sln -c Release --no-build --verbosity normal
 
-  build_windows:
+  build_linux:
     needs: generate_version_number
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core @ Latest
