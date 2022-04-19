@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace DeveWeb3Cli.Tests.TestHelpers
@@ -10,11 +11,13 @@ namespace DeveWeb3Cli.Tests.TestHelpers
 
         public static string ToAbsPath(this string relativePath)
         {
+            var relativePathWithRightPathSeparator = relativePath.Replace('\\', Path.PathSeparator).Replace('/', Path.PathSeparator);
+
             var curAssembly = Assembly.GetAssembly(typeof(TestPathHelpers))!.Location;
             var curDir = Path.GetDirectoryName(curAssembly);
-            var path1 = Path.Combine(curDir, relativePath);
-            var path2 = Path.GetFullPath(path1);
-            return path2;
+            var totalPath = Path.Combine(curDir, relativePathWithRightPathSeparator);
+            var totalPathResolved = Path.GetFullPath(totalPath);
+            return totalPathResolved;
         }
     }
 }
