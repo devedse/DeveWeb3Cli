@@ -124,8 +124,17 @@ namespace DeveWeb3Cli.Commands.Contract.Call
                     var dataObject = dataAsList[i];
 
                     var abiType = parameter.ABIType;
-                    var val = JValue.Parse(dataObject);
-                    jsonData.Add(parameter.Name, val);
+
+                    try
+                    {
+                        var val = JValue.Parse(dataObject);
+                        jsonData.Add(parameter.Name, val);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Could not parse {dataObject}");
+                        throw;
+                    }
                 }
 
                 data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
