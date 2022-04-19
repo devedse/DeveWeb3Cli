@@ -49,7 +49,7 @@ namespace DeveWeb3Cli
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Parser exception: {ex.Message}");
+                Console.WriteLine($"Parser exception: {ex}");
             }
         }
 
@@ -65,7 +65,7 @@ namespace DeveWeb3Cli
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to resolve command dependencies: {ex.Message}");
+                Console.WriteLine($"Failed to resolve command dependencies: {ex}");
                 returnValue = 1;
                 return;
             }
@@ -78,7 +78,7 @@ namespace DeveWeb3Cli
             catch (Exception ex)
             {
                 // Ideally this code should never execute.
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
                 if (command.Verbose)
                 {
                     Console.WriteLine(Environment.NewLine + "=== Exception ===");
