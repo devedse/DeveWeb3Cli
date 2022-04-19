@@ -95,6 +95,9 @@ namespace DeveWeb3Cli.Commands.Contract.Call
             else if (Data != null && Data.Any())
             {
                 var dataString = string.Join(" ", Data);
+
+                Console.WriteLine($"Input data: {dataString}");
+
                 var dataAsList = TheStringSplitterRegex.Matches(dataString).Cast<Match>().Select(m => m.Value).Where(t => !string.IsNullOrWhiteSpace(t)).ToList();
 
                 var functionBuilder = contract.ContractBuilder.GetFunctionBuilder(Function);

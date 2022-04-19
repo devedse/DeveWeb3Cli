@@ -23,9 +23,12 @@ namespace DeveWeb3Cli.Services
 
             while (receipt == null)
             {
+                Console.WriteLine("Still waiting...");
                 await Task.Delay(5000);
                 receipt = await GetReceipt();
             }
+
+            Console.WriteLine($"Got receipt for TransactionHash: {transactionHash}. Result: {receipt.Status.Value}");
 
             return receipt;
         }
