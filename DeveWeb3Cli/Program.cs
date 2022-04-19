@@ -3,27 +3,29 @@ using DeveWeb3Cli.CommandHelpers;
 using DeveWeb3Cli.Commands.Contract;
 using DeveWeb3Cli.Modules;
 using Ninject;
-using System;
 
 namespace DeveWeb3Cli
 {
     public class Program
     {
-        private static IKernel kernel;
-        private static int returnValue;
+        private IKernel kernel;
+        private int returnValue;
 
-        public static async Task<int> Main(string[] args)
+        public static Task<int> Main(string[] args)
         {
-            for (int i = 0; i < args.Length; i++)
-            {
-                var arg = args[i];
-                Console.WriteLine($"{i}: >{arg}<");
-            }
+            var program = new Program();
+            return program.ProcessCommandLineArguments(args);
+        }
 
-
+        public Program()
+        {
             // Composition root is here... we load the injector and modules
             // Business behavior is determined by modules, so commands stay loosely coupled.
             kernel = new StandardKernel(new AppModule());
+        }
+
+        private async Task<int> ProcessCommandLineArguments(string[] args)
+        {
             try
             {
                 await ProcessArgs(args);
@@ -35,7 +37,7 @@ namespace DeveWeb3Cli
             }
         }
 
-        private static async Task ProcessArgs(IEnumerable<string> args)
+        private async Task ProcessArgs(IEnumerable<string> args)
         {
             try
             {
@@ -51,7 +53,7 @@ namespace DeveWeb3Cli
             }
         }
 
-        private static async Task ExecuteCommand(object arg)
+        private async Task ExecuteCommand(object arg)
         {
             CommandBase command;
             try
@@ -87,6 +89,6 @@ namespace DeveWeb3Cli
             }
         }
 
-        private static void ParseError(IEnumerable<Error> obj) => returnValue = 1;
+        private void ParseError(IEnumerable<Error> obj) => returnValue = 1;
     }
 }
