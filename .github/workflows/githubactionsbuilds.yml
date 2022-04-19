@@ -111,8 +111,14 @@ jobs:
     - name: Pack
       run: dotnet pack DeveWeb3Cli/DeveWeb3Cli.csproj --verbosity normal --no-build -c Release /p:Version=1.0.${{needs.generate_version_number.outputs.build_number}}
  
-    - name: FindCommand
+    - name: FindCommand 1
       run: find
+
+    - name: FindCommand 2
+      run: find / -type f -name "*.xml"
+
+    - name: FindCommand 3
+      run: find /
 
     - name: Run CodeCov #codecov -f ".\DeveWeb3Cli.Tests\TestResults\Coverage\coverage.opencover.xml"
       uses: codecov/codecov-action@v2
