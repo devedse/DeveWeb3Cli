@@ -112,13 +112,10 @@ jobs:
     - name: Pack
       run: dotnet pack DeveWeb3Cli/DeveWeb3Cli.csproj --verbosity normal --no-build -c Release /p:Version=1.0.${{needs.generate_version_number.outputs.build_number}}
 
-    - name: Run CodeCov #codecov -f ".\DeveWeb3Cli.Tests\TestResults\Coverage\coverage.opencover.xml"
+    - name: Run CodeCov
       uses: codecov/codecov-action@v2
       with:
-        #token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-        files: DeveWeb3Cli.Tests/TestResults/*/coverage.opencover.xml # optional
-        #flags: unittests # optional
-        #name: codecov-umbrella # optional
+        directory: ./DeveCoolLib.Tests/TestResults
         fail_ci_if_error: true # optional (default = false)
         verbose: true # optional (default = false)
 
