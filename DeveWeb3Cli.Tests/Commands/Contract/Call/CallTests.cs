@@ -18,7 +18,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
                 var ethBefore = await web3.Eth.GetBalance.SendRequestAsync(TestConstants.TestAccount1.Address);
 
                 using var tempFileOutput1 = TempFile.Create(".json");
-                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --outputjson {tempFileOutput1} ExampleData\EthernalLock.json";
+                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --outputjson {tempFileOutput1} {TestPathHelpers.EthernalLockJson}";
                 var result = await Program.Main(args.Split(" "));
                 Assert.Equal(0, result);
 
@@ -31,7 +31,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
                 File.WriteAllText(tempFileDataInput, "{'count': '2'}");
 
 
-                string args2 = @$"contract call --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --address {transactionReceipt.ContractAddress} --abi ExampleData\EthernalLock.json --function setHighestValidLockType --jsondatafilepath {tempFileDataInput}";
+                string args2 = @$"contract call --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --address {transactionReceipt.ContractAddress} --abi {TestPathHelpers.EthernalLockJson} --function setHighestValidLockType --jsondatafilepath {tempFileDataInput}";
                 var result2 = await Program.Main(args2.Split(" "));
                 Assert.Equal(0, result2);
 
@@ -49,7 +49,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
                 var ethBefore = await web3.Eth.GetBalance.SendRequestAsync(TestConstants.TestAccount1.Address);
 
                 using var tempFileOutput1 = TempFile.Create(".json");
-                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --outputjson {tempFileOutput1} ExampleData\EthernalLock.json";
+                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --outputjson {tempFileOutput1} {TestPathHelpers.EthernalLockJson}";
                 var result = await Program.Main(args.Split(" "));
                 Assert.Equal(0, result);
 
@@ -57,7 +57,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
                 //Only newtonsoft can work with parameterless constructors
                 var transactionReceipt = JsonConvert.DeserializeObject<TransactionReceipt>(stringOutput);
 
-                string args2 = @$"contract call --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --address {transactionReceipt.ContractAddress} --abi ExampleData\EthernalLock.json --function setHighestValidLockType 2";
+                string args2 = @$"contract call --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --address {transactionReceipt.ContractAddress} --abi {TestPathHelpers.EthernalLockJson} --function setHighestValidLockType 2";
                 var result2 = await Program.Main(args2.Split(" "));
                 Assert.Equal(0, result2);
 
@@ -75,7 +75,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
                 var ethBefore = await web3.Eth.GetBalance.SendRequestAsync(TestConstants.TestAccount1.Address);
 
                 using var tempFileOutput1 = TempFile.Create(".json");
-                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --outputjson {tempFileOutput1} ExampleData\Test.json";
+                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --outputjson {tempFileOutput1} {TestPathHelpers.TestJson}";
                 var result = await Program.Main(args.Split(" "));
                 Assert.Equal(0, result);
 
@@ -88,7 +88,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
                 File.WriteAllText(tempFileDataInput, "{ 'number': '2', 'backgroundColor': { 'R': 128, 'G': 100, 'B': 12 } }");
 
 
-                string args2 = @$"contract call --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --address {transactionReceipt.ContractAddress} --abi ExampleData\Test.json --function create --jsondatafilepath {tempFileDataInput}";
+                string args2 = @$"contract call --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --address {transactionReceipt.ContractAddress} --abi {TestPathHelpers.TestJson} --function create --jsondatafilepath {tempFileDataInput}";
                 var result2 = await Program.Main(args2.Split(" "));
                 Assert.Equal(0, result2);
 
@@ -106,7 +106,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
                 var ethBefore = await web3.Eth.GetBalance.SendRequestAsync(TestConstants.TestAccount1.Address);
 
                 using var tempFileOutput1 = TempFile.Create(".json");
-                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --outputjson {tempFileOutput1} ExampleData\Test.json";
+                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --outputjson {tempFileOutput1} {TestPathHelpers.TestJson}";
                 var result = await Program.Main(args.Split(" "));
                 Assert.Equal(0, result);
 
@@ -117,7 +117,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
 
                 string calldata = "2 \"{ 'R': 128, 'G': 100, 'B': 12 }\"";
 
-                string args2 = @$"contract call --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --address {transactionReceipt.ContractAddress} --abi ExampleData\Test.json --function create {calldata}";
+                string args2 = @$"contract call --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} --address {transactionReceipt.ContractAddress} --abi {TestPathHelpers.TestJson} --function create {calldata}";
                 var result2 = await Program.Main(args2.Split(" "));
                 Assert.Equal(0, result2);
 

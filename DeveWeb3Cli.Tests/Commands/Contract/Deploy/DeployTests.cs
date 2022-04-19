@@ -14,7 +14,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Deploy
                 var web3 = TestWeb3Creator.GetWeb3(web3Container.RpcUrl);
                 var ethBefore = await web3.Eth.GetBalance.SendRequestAsync(TestConstants.TestAccount1.Address);
 
-                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} ExampleData\EthernalLock.json";
+                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} {TestPathHelpers.EthernalLockJson}";
                 var result = await Program.Main(args.Split(" "));
                 Assert.Equal(0, result);
 
@@ -31,7 +31,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Deploy
                 var web3 = TestWeb3Creator.GetWeb3(web3Container.RpcUrl);
                 var ethBefore = await web3.Eth.GetBalance.SendRequestAsync(TestConstants.TestAccount1.Address);
 
-                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl}aoiwefj --private-key {TestConstants.TestAccount1_PrivateKey} ExampleData\EthernalLock.json";
+                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl}aoiwefj --private-key {TestConstants.TestAccount1_PrivateKey} {TestPathHelpers.EthernalLockJson}";
                 var result = await Program.Main(args.Split(" "));
                 Assert.Equal(1, result);
 
@@ -48,7 +48,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Deploy
                 var web3 = TestWeb3Creator.GetWeb3(web3Container.RpcUrl);
                 var ethBefore = await web3.Eth.GetBalance.SendRequestAsync(TestConstants.TestAccount1.Address);
 
-                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} ExampleData\EthernalLock.json data1 data2 data3";
+                string args = @$"contract deploy --network Private --rpc-url {web3Container.RpcUrl} --private-key {TestConstants.TestAccount1_PrivateKey} {TestPathHelpers.EthernalLockJson} data1 data2 data3";
                 var result = await Program.Main(args.Split(" "));
                 Assert.Equal(0, result);
 

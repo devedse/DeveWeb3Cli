@@ -17,9 +17,9 @@ namespace DeveWeb3Cli.Tests.TestHelpers
             }
         }
 
-        public TempFile(string filePath)
+        public TempFile(string fileName)
         {
-            FilePath = filePath;
+            FilePath = fileName.ToAbsPath();
         }
 
         public override string ToString()
