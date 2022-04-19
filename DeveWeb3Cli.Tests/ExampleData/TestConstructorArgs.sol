@@ -2,7 +2,7 @@
 
 pragma solidity >=0.4.22 <0.9.0;
 
-contract Test {
+contract TestConstructorArgs {
 
     struct Color {
         uint8 R;
@@ -14,7 +14,9 @@ contract Test {
     uint public theNumber;
     string public theTxt;
 
-    function create(uint number, Color calldata backgroundColor, string calldata txt) public {
+    constructor(uint number, Color memory backgroundColor, string memory txt) payable {
+        require(msg.value >= 0.001 ether, "Payment is not enough");
+
         theNumber = number;
         theBackgroundColor = backgroundColor;
         theTxt = txt;

@@ -1,9 +1,13 @@
 ﻿using CommandLine;
+using Nethereum.ABI.ABIDeserialisation;
+using Nethereum.Contracts;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using Newtonsoft.Json;
+using System.Numerics;
 using System.Text.Json;
+using static Nethereum.Util.UnitConversion;
 
 namespace DeveWeb3Cli.Commands.Contract.Deploy
 {
@@ -39,6 +43,47 @@ namespace DeveWeb3Cli.Commands.Contract.Deploy
                 throw new ArgumentException($"Could not find file in path {ContractFilePath}");
             }
 
+            string? abi = null;
+            if (!string.IsNullOrWhiteSpace(AbiFilePath))
+            {
+                abi = File.ReadAllText(AbiFilePath);
+
+                if (Path.GetExtension(AbiFilePath).Equals(".json", StringComparison.OrdinalIgnoreCase))
+                {
+                    using (var document = JsonDocument.Parse(abi))
+                    {
+                        var abielement = document.RootElement.EnumerateObject().FirstOrDefault(t => t.Name == "abi");
+                        abi = abielement.Value.ToString();
+                    }
+                }
+            }
+
+            BigInteger? gasPrice = null;
+            if (!string.IsNullOrWhiteSpace(GasPriceGwei))
+            {
+                if (BigInteger.TryParse(GasPriceGwei, out var resultParseGasPrice))
+                {
+                    gasPrice = Web3.Convert.ToWei(resultParseGasPrice, EthUnit.Gwei);
+                }
+                else
+                {
+                    throw new ArgumentException($"Could not parse GasPriceGwei: {GasPriceGwei}");
+                }
+            }
+
+            BigInteger? value = null;
+            if (!string.IsNullOrWhiteSpace(Value))
+            {
+                if (BigInteger.TryParse(Value, out var resultParseValue))
+                {
+                    value = resultParseValue;
+                }
+                else
+                {
+                    throw new ArgumentException($"Could not parse Value: {Value}");
+                }
+            }
+
             var byteCode = File.ReadAllText(ContractFilePath);
 
             if (Path.GetExtension(ContractFilePath).Equals(".json", StringComparison.OrdinalIgnoreCase))
@@ -53,8 +98,30 @@ namespace DeveWeb3Cli.Commands.Contract.Deploy
             var account = new Account(PrivateKey, GetChainId());
             var web3 = new Web3(account, RpcUrl);
 
-            var gasEstimate = await web3.Eth.DeployContract.EstimateGasAsync("", byteCode, account.Address);
-            var transactionHash = await web3.Eth.DeployContract.SendRequestAsync(byteCode, account.Address, new HexBigInteger(gasEstimate), new HexBigInteger(0));
+
+            var data = new object[0];
+
+            if (Data?.Any() == true)
+            {
+                if (string.IsNullOrWhiteSpace(abi))
+                {
+                    throw new ArgumentException("Abi should be provided when passing constructor parameters to the smart contract.");
+                }
+
+                var contractABI = ABIDeserialiserFactory.DeserialiseContractABI(abi);
+                data = BlockchainService.CreateInputData(contractABI.Constructor.InputParameters, null, Data);
+            }
+
+
+
+
+            var deployContractTransBuilder = new DeployContractTransactionBuilder();
+            var calldata = deployContractTransBuilder.BuildTransaction(abi, byteCode, account.Address, new HexBigInteger(6000000), gasPrice != null ? new HexBigInteger(gasPrice.Value) : null, new HexBigInteger(value ?? 0), data);
+
+            //var gasEstimate2 = await web3.Eth.DeployContract.EstimateGasAsync(abi, byteCode, account.Address, data);
+            var gasEstimate = await web3.TransactionManager.EstimateGasAsync(calldata);
+            //var gasEstimate = await web3.Eth.DeployContract.EstimateGasAsync("", byteCode, account.Address);
+            var transactionHash = await web3.Eth.DeployContract.SendRequestAsync(abi, byteCode, account.Address, new HexBigInteger(gasEstimate), gasPrice != null ? new HexBigInteger(gasPrice.Value) : null, new HexBigInteger(value ?? 0), data);
             Console.WriteLine($"TransactionHash: {transactionHash}");
 
             var receipt = await BlockchainService.WaitForReceipt(web3, transactionHash);

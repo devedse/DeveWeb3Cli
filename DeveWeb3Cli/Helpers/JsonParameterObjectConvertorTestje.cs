@@ -8,18 +8,13 @@ namespace DeveWeb3Cli.Helpers
 {
     public static class JsonParameterObjectConvertorTestje
     {
-        public static object[] ConvertToFunctionInputParameterValues(string json, FunctionABI function)
+        public static object[] ConvertToInputParameterValues(string json, Parameter[] parameters)
         {
             var jObject = JObject.Parse(json);
-            return ConvertToFunctionInputParameterValues(jObject, function);
+            return ConvertToInputParameterValues(jObject, parameters);
         }
 
-        public static object[] ConvertToFunctionInputParameterValues(this JToken jObject, FunctionABI function)
-        {
-            return ConvertToFunctionInputParameterValues(jObject, function.InputParameters);
-        }
-
-        public static object[] ConvertToFunctionInputParameterValues(this JToken jObject, Parameter[] parameters)
+        public static object[] ConvertToInputParameterValues(this JToken jObject, Parameter[] parameters)
         {
             var output = new List<object>();
             var parametersInOrder = parameters.OrderBy(x => x.Order);
@@ -40,7 +35,7 @@ namespace DeveWeb3Cli.Helpers
             if (tupleAbi != null)
             {
                 var tupleValue = jToken;
-                inputParameters.Add(ConvertToFunctionInputParameterValues(tupleValue, tupleAbi.Components));
+                inputParameters.Add(ConvertToInputParameterValues(tupleValue, tupleAbi.Components));
             }
 
             var arrayAbi = abiType as ArrayType;

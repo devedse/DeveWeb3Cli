@@ -7,6 +7,7 @@ namespace DeveWeb3Cli.Tests.TestHelpers
     {
         public static string EthernalLockJson => @"ExampleData\EthernalLock.json".ToAbsPath();
         public static string TestJson => @"ExampleData\Test.json".ToAbsPath();
+        public static string TestConstructorArgsJson => @"ExampleData\TestConstructorArgs.json".ToAbsPath();
 
         public static string ToAbsPath(this string relativePath)
         {

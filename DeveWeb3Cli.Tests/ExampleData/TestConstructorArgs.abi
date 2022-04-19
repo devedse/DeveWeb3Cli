@@ -24,7 +24,7 @@
 						"type": "uint8"
 					}
 				],
-				"internalType": "struct Test.Color",
+				"internalType": "struct TestConstructorArgs.Color",
 				"name": "backgroundColor",
 				"type": "tuple"
 			},
@@ -34,10 +34,8 @@
 				"type": "string"
 			}
 		],
-		"name": "create",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"stateMutability": "payable",
+		"type": "constructor"
 	},
 	{
 		"inputs": [],

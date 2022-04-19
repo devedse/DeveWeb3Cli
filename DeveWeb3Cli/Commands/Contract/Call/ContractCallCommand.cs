@@ -4,25 +4,23 @@ using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using static Nethereum.Util.UnitConversion;
 
 namespace DeveWeb3Cli.Commands.Contract.Call
 {
     [Verb("call", HelpText = "Call contract function")]
     public class ContractCallCommand : ContractCommand
     {
-        public static readonly Regex TheStringSplitterRegex = new Regex("(?<=\")[^\"]*(?=\")|[^\" ]+", RegexOptions.Compiled);
 
         [Option("private-key", Env = "WEB3_PRIVATE_KEY", Required = false, HelpText = "The private key [$WEB3_PRIVATE_KEY]")]
         public string? PrivateKey { get; set; }
 
         [Option("timeout", Required = false, Default = 60, HelpText = "Timeout in seconds (default: 60).")]
         public int TimeoutInSeconds { get; set; }
-
-        [Option("abi", Required = true, HelpText = "ABI file matching deployed contract")]
-        public string AbiFilePath { get; set; } = null!;
 
         [Option("function", Required = true, HelpText = "Target function name")]
         public string Function { get; set; } = null!;
@@ -36,8 +34,7 @@ namespace DeveWeb3Cli.Commands.Contract.Call
         [Option("jsondatafilepath", Required = false, HelpText = "Json File Path with data to pass to smart contract function call")]
         public string? JsonDataFilePath { get; set; }
 
-        [Value(1, Required = false)]
-        public IEnumerable<string>? Data { get; set; }
+
 
         public override async Task Execute()
         {
@@ -66,6 +63,32 @@ namespace DeveWeb3Cli.Commands.Contract.Call
                 throw new ArgumentException("Address field should have been provided.");
             }
 
+            BigInteger? gasPrice = null;
+            if (!string.IsNullOrWhiteSpace(GasPriceGwei))
+            {
+                if (BigInteger.TryParse(GasPriceGwei, out var resultParseGasPrice))
+                {
+                    gasPrice = Web3.Convert.ToWei(resultParseGasPrice, EthUnit.Gwei);
+                }
+                else
+                {
+                    throw new ArgumentException($"Could not parse GasPriceGwei: {GasPriceGwei}");
+                }
+            }
+
+            BigInteger? value = null;
+            if (!string.IsNullOrWhiteSpace(Value))
+            {
+                if (BigInteger.TryParse(Value, out var resultParseValue))
+                {
+                    value = resultParseValue;
+                }
+                else
+                {
+                    throw new ArgumentException($"Could not parse Value: {Value}");
+                }
+            }
+
             var abi = File.ReadAllText(AbiFilePath);
 
             if (Path.GetExtension(AbiFilePath).Equals(".json", StringComparison.OrdinalIgnoreCase))
@@ -84,65 +107,19 @@ namespace DeveWeb3Cli.Commands.Contract.Call
             var theFunction = contract.GetFunction(Function);
 
 
-            object[] data = new object[0];
-            if (!string.IsNullOrWhiteSpace(JsonDataFilePath) && File.Exists(JsonDataFilePath))
-            {
-                var jsonData = File.ReadAllText(JsonDataFilePath);
 
-                data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
-                //data = DeveWeb3Cli.Helpers.JsonParameterObjectConvertorTestje.ConvertToFunctionInputParameterValues(jsonData, contract.ContractBuilder.GetFunctionBuilder(Function).FunctionABI);
-            }
-            else if (Data != null && Data.Any())
-            {
-                var dataString = string.Join(" ", Data);
+            var functionBuilder = contract.ContractBuilder.GetFunctionBuilder(Function);
+            var functionAbi = functionBuilder.FunctionABI;
 
-                Console.WriteLine($"Input data: {dataString}");
-
-                var dataAsList = TheStringSplitterRegex.Matches(dataString).Cast<Match>().Select(m => m.Value).Where(t => !string.IsNullOrWhiteSpace(t)).ToList();
-
-                var functionBuilder = contract.ContractBuilder.GetFunctionBuilder(Function);
-                var functionAbi = functionBuilder.FunctionABI;
-
-                var parametersInOrder = functionAbi.InputParameters.OrderBy(x => x.Order).ToList();
-
-                if (parametersInOrder.Count != dataAsList.Count)
-                {
-                    var sb = new StringBuilder();
-                    for (int i = 0; i < dataAsList.Count; i++)
-                    {
-                        sb.AppendLine($"{i}: {dataAsList[i]}");
-                    }
-                    Console.WriteLine($"Data as string: >{dataString}<");
-                    throw new ArgumentException($"Expected {parametersInOrder.Count} elements in Data, but got: {dataAsList.Count}{Environment.NewLine}{sb}");
-                }
+            var data = BlockchainService.CreateInputData(functionAbi.InputParameters, JsonDataFilePath, Data);
 
 
-                var jsonData = new JObject();
-                for (int i = 0; i < parametersInOrder.Count; i++)
-                {
-                    var parameter = parametersInOrder[i];
-                    var dataObject = dataAsList[i];
 
-                    var abiType = parameter.ABIType;
 
-                    try
-                    {
-                        var val = JValue.Parse(dataObject);
-                        jsonData.Add(parameter.Name, val);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Could not parse {dataObject}");
-                        throw;
-                    }
-                }
+            var gasEstimate = await theFunction.EstimateGasAsync(account.Address, new HexBigInteger(6000000), new HexBigInteger(value ?? 0), data);
 
-                data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
-                //data = DeveWeb3Cli.Helpers.JsonParameterObjectConvertorTestje.ConvertToFunctionInputParameterValues(jsonData, contract.ContractBuilder.GetFunctionBuilder(Function).FunctionABI);
-            }
+            var transactionHash = await theFunction.SendTransactionAsync(account.Address, new HexBigInteger(gasEstimate), gasPrice != null ? new HexBigInteger(gasPrice.Value) : null, new HexBigInteger(value ?? 0), data);
 
-            var gasEstimate = await theFunction.EstimateGasAsync(account.Address, new HexBigInteger(6000000), new HexBigInteger(0), data);
-            var transactionHash = await theFunction.SendTransactionAsync(account.Address, new HexBigInteger(gasEstimate), new HexBigInteger(0), data);
             Console.WriteLine($"TransactionHash: {transactionHash}");
 
             var receipt = await BlockchainService.WaitForReceipt(web3, transactionHash);
@@ -158,5 +135,7 @@ namespace DeveWeb3Cli.Commands.Contract.Call
                 File.WriteAllText(OutputJsonPath, jsonTxt);
             }
         }
+
+
     }
 }

@@ -19,5 +19,17 @@ namespace DeveWeb3Cli.Commands.Contract
 
         [Option("outputjson", Required = false, HelpText = "The JSON file path to output to.")]
         public string? OutputJsonPath { get; set; }
+
+        [Option("abi", Required = false, HelpText = "ABI file matching contract (Required when passing calling functions or when passing input parameters to constructor)")]
+        public string AbiFilePath { get; set; } = null!;
+
+        [Option("value", Required = false, Default = "0", HelpText = "")]
+        public string? Value { get; set; }
+
+        [Option("gas-price-gwei", Required = false, HelpText = "")]
+        public string? GasPriceGwei { get; set; }
+
+        [Value(1, Required = false)]
+        public IEnumerable<string>? Data { get; set; }
     }
 }
