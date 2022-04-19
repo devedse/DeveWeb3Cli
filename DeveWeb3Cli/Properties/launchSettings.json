@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DeveWeb3Cli": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
