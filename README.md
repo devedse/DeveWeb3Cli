@@ -1,5 +1,5 @@
 # DeveWeb3Cli
-Web3 CLI which is somewhat similar to gochain/web3 but built in C# with Nethereum
+Web3 CLI which is somewhat similar to https://github.com/gochain/web3 but built in C# with Nethereum
 
 Important: This library/tool is far from complete :).
 
