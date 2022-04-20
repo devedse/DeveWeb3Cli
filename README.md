@@ -7,6 +7,8 @@ It's quite a lot less feature complete but does support some functionality that 
 3. Having an infinite timeout (I still need to implement passing in a customer timeout)
 4. Passing in London hardfork Gas Stuff (Still WIP)
 
+Please see the UnitTest project on how to use this library.
+
 Important: This library/tool is far from complete :).
 
 ## Build status
