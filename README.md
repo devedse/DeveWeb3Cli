@@ -1,5 +1,11 @@
 # DeveWeb3Cli
-Web3 CLI which is somewhat similar to https://github.com/gochain/web3 but built in C# with Nethereum
+Web3 CLI which is somewhat similar to https://github.com/gochain/web3 but built in C# with Nethereum.
+It's quite a lot less feature complete but does support some functionality that gochain/web3 doesn't, like:
+
+1. Passing structs as arguments
+2. Outputting data to a file
+3. Having an infinite timeout (I still need to implement passing in a customer timeout)
+4. Passing in London hardfork Gas Stuff (Still WIP)
 
 Important: This library/tool is far from complete :).
 
