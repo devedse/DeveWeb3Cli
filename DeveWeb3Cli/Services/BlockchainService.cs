@@ -30,7 +30,7 @@ namespace DeveWeb3Cli.Services
 
             while (receipt == null)
             {
-                Console.WriteLine("Still waiting...");
+                Console.WriteLine($"Still waiting on transaction: {transactionHash}");
                 await Task.Delay(5000);
                 receipt = await GetReceipt();
             }
