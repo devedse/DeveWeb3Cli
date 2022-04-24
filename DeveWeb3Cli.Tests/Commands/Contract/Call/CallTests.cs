@@ -190,6 +190,7 @@ namespace DeveWeb3Cli.Tests.Commands.Contract.Call
             }
         }
 
+        [Fact]
         public async Task StructsTestCallWithDataDirectCreateLock_WithNewGasMechanic()
         {
             using (var web3Container = Web3ContainerCreator.CreateContainer())
