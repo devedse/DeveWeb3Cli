@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using DeveWeb3Cli.InputConverters;
 using Nethereum.ABI.ABIDeserialisation;
+using Nethereum.ABI.Model;
 using Nethereum.Contracts;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Web3;
@@ -63,20 +64,18 @@ namespace DeveWeb3Cli.Commands.Contract.Deploy
             var web3 = new Web3(account, RpcUrl);
 
 
-            var data = new object[0];
-
-            if (Data?.Any() == true)
+            var inputParams = new Parameter[0];
+            if (!string.IsNullOrWhiteSpace(abi))
             {
-                if (string.IsNullOrWhiteSpace(abi))
-                {
-                    throw new ArgumentException("Abi should be provided when passing constructor parameters to the smart contract.");
-                }
-
                 var contractABI = ABIDeserialiserFactory.DeserialiseContractABI(abi);
-                data = BlockchainService.CreateInputData(contractABI.Constructor.InputParameters, JsonDataFilePath, Data);
+                inputParams = contractABI.Constructor.InputParameters;
             }
+            var data = BlockchainService.CreateInputData(inputParams, JsonDataFilePath, Data);
 
-
+            if (data.Length > 0 && string.IsNullOrWhiteSpace(abi))
+            {
+                throw new ArgumentException("Abi should be provided when passing constructor parameters to the smart contract.");
+            }
 
 
             var deployContractTransBuilder = new DeployContractTransactionBuilder();

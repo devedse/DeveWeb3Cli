@@ -25,7 +25,7 @@ namespace DeveWeb3Cli.Commands.Contract
         [Option("abi", Required = false, HelpText = "ABI file matching contract (Required when passing calling functions or when passing input parameters to constructor)")]
         public string AbiFilePath { get; set; } = null!;
 
-        [Option("value", Required = false, Default = "0", HelpText = "The desired Value (e.g. 10_gwei)")]
+        [Option("value", Required = false, HelpText = "The desired Value (e.g. 10_gwei)")]
         public EtherValue? Value { get; set; }
 
         [Option("gas-limit", Required = false, HelpText = "The desired Gas Limit (Will do automatic gas estimation if it is not provided)")]
