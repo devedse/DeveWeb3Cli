@@ -15,7 +15,7 @@ namespace DeveWeb3Cli.Tests.TestHelpers
 
             var curAssembly = Assembly.GetAssembly(typeof(TestPathHelpers))!.Location;
             var curDir = Path.GetDirectoryName(curAssembly);
-            var totalPath = Path.Combine(curDir, relativePathWithRightPathSeparator);
+            var totalPath = Path.Combine(curDir!, relativePathWithRightPathSeparator);
             var totalPathResolved = Path.GetFullPath(totalPath);
             return totalPathResolved;
         }

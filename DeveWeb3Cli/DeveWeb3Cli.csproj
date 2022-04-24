@@ -15,14 +15,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParserWithEnvironmentVariables" Version="2.8.0" />
+    <PackageReference Include="CommandLineParserWithEnvironmentVariables" Version="2.8.2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="Nethereum.Web3" Version="4.3.0" />
-    <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="Ninject" Version="3.3.5" />
   </ItemGroup>
 
 </Project>

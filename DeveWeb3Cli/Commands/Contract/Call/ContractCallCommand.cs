@@ -1,27 +1,16 @@
 ﻿using CommandLine;
+using DeveWeb3Cli.InputConverters;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Numerics;
-using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
-using static Nethereum.Util.UnitConversion;
 
 namespace DeveWeb3Cli.Commands.Contract.Call
 {
     [Verb("call", HelpText = "Call contract function")]
     public class ContractCallCommand : ContractCommand
     {
-
-        [Option("private-key", Env = "WEB3_PRIVATE_KEY", Required = false, HelpText = "The private key [$WEB3_PRIVATE_KEY]")]
-        public string? PrivateKey { get; set; }
-
-        [Option("timeout", Required = false, Default = 60, HelpText = "Timeout in seconds (default: 60).")]
-        public int TimeoutInSeconds { get; set; }
-
         [Option("function", Required = true, HelpText = "Target function name")]
         public string Function { get; set; } = null!;
 
@@ -36,22 +25,13 @@ namespace DeveWeb3Cli.Commands.Contract.Call
 
 
 
+        [Value(1, Required = false)]
+        public IEnumerable<string>? Data { get; set; }
+
+
+
         public override async Task Execute()
         {
-            if (string.IsNullOrEmpty(PrivateKey))
-            {
-                throw new ArgumentException("private-key field should have been provided.");
-            }
-
-            if (string.IsNullOrEmpty(RpcUrl))
-            {
-                throw new ArgumentException("rpc-url field should have been provided.");
-            }
-
-            if (!File.Exists(AbiFilePath))
-            {
-                throw new ArgumentException($"Could not find file in path {AbiFilePath}");
-            }
 
             if (string.IsNullOrWhiteSpace(Function))
             {
@@ -63,32 +43,10 @@ namespace DeveWeb3Cli.Commands.Contract.Call
                 throw new ArgumentException("Address field should have been provided.");
             }
 
-            BigInteger? gasPrice = null;
-            if (!string.IsNullOrWhiteSpace(GasPriceGwei))
+            if (!File.Exists(AbiFilePath))
             {
-                if (BigInteger.TryParse(GasPriceGwei, out var resultParseGasPrice))
-                {
-                    gasPrice = Web3.Convert.ToWei(resultParseGasPrice, EthUnit.Gwei);
-                }
-                else
-                {
-                    throw new ArgumentException($"Could not parse GasPriceGwei: {GasPriceGwei}");
-                }
+                throw new ArgumentException($"Could not find file in path {AbiFilePath}");
             }
-
-            BigInteger? value = null;
-            if (!string.IsNullOrWhiteSpace(Value))
-            {
-                if (BigInteger.TryParse(Value, out var resultParseValue))
-                {
-                    value = resultParseValue;
-                }
-                else
-                {
-                    throw new ArgumentException($"Could not parse Value: {Value}");
-                }
-            }
-
             var abi = File.ReadAllText(AbiFilePath);
 
             if (Path.GetExtension(AbiFilePath).Equals(".json", StringComparison.OrdinalIgnoreCase))
@@ -114,11 +72,23 @@ namespace DeveWeb3Cli.Commands.Contract.Call
             var data = BlockchainService.CreateInputData(functionAbi.InputParameters, JsonDataFilePath, Data);
 
 
+            var gasEstimate = GasLimit;
+            if (gasEstimate == null)
+            {
+                //var gasEstimate2 = await web3.Eth.DeployContract.EstimateGasAsync(abi, byteCode, account.Address, data);
+                gasEstimate = await theFunction.EstimateGasAsync(account.Address, new HexBigInteger(6000000), Value.AsHexBigIntegerWith0(), data);
+                //var gasEstimate = await web3.Eth.DeployContract.EstimateGasAsync("", byteCode, account.Address);
+            }
 
-
-            var gasEstimate = await theFunction.EstimateGasAsync(account.Address, new HexBigInteger(6000000), new HexBigInteger(value ?? 0), data);
-
-            var transactionHash = await theFunction.SendTransactionAsync(account.Address, new HexBigInteger(gasEstimate), gasPrice != null ? new HexBigInteger(gasPrice.Value) : null, new HexBigInteger(value ?? 0), data);
+            string transactionHash;
+            if (GasPrice != null)
+            {
+                transactionHash = await theFunction.SendTransactionAsync(account.Address, new HexBigInteger(gasEstimate.Value), GasPrice.AsHexBigIntegerWithNull(), Value.AsHexBigIntegerWith0(), data);
+            }
+            else
+            {
+                transactionHash = await theFunction.SendTransactionAsync(account.Address, new HexBigInteger(gasEstimate.Value), Value.AsHexBigIntegerWith0(), MaxFeePerGas.AsHexBigIntegerWithNull(), MaxPriorityFeePerGas.AsHexBigIntegerWithNull(), data);
+            }
 
             Console.WriteLine($"TransactionHash: {transactionHash}");
 

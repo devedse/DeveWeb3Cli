@@ -40,13 +40,13 @@ namespace DeveWeb3Cli.Services
             return receipt;
         }
 
-        public object[] CreateInputData(Parameter[] parameters, string? JsonDataFilePath, IEnumerable<string>? Data)
+        public object[] CreateInputData(Parameter[] parameters, string? jsonDataFilePath, IEnumerable<string>? Data)
         {
 
             object[] data = new object[0];
-            if (!string.IsNullOrWhiteSpace(JsonDataFilePath) && File.Exists(JsonDataFilePath))
+            if (!string.IsNullOrWhiteSpace(jsonDataFilePath) && File.Exists(jsonDataFilePath))
             {
-                var jsonData = File.ReadAllText(JsonDataFilePath);
+                var jsonData = File.ReadAllText(jsonDataFilePath);
 
                 //data = theFunction.ConvertJsonToObjectInputParameters(jsonData);
                 data = DeveWeb3Cli.Helpers.JsonParameterObjectConvertorTestje.ConvertToInputParameterValues(jsonData, parameters);
