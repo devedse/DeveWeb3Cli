@@ -39,7 +39,7 @@ namespace DeveWeb3Cli
 
         private async Task ProcessArgs(IEnumerable<string> args)
         {
-            args = new List<string>() { "contract", "deploy", "--value", "10_gwei", "--private-key", "blah", "--rpc-url", "blah", "blah.bin" };
+            //args = new List<string>() { "contract", "deploy", "--value", "10_gwei", "--private-key", "blah", "--rpc-url", "blah", "blah.bin" };
 
             try
             {
