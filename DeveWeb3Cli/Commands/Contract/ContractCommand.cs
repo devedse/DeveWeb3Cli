@@ -25,18 +25,18 @@ namespace DeveWeb3Cli.Commands.Contract
         [Option("abi", Required = false, HelpText = "ABI file matching contract (Required when passing calling functions or when passing input parameters to constructor)")]
         public string AbiFilePath { get; set; } = null!;
 
-        [Option("value", Required = false, HelpText = "The desired Value (e.g. 10_gwei)")]
+        [Option("value", Required = false, HelpText = "The desired Value (e.g. 10.5_gwei)")]
         public EtherValue? Value { get; set; }
 
         [Option("gas-limit", Required = false, HelpText = "The desired Gas Limit (Will do automatic gas estimation if it is not provided)")]
         public BigInteger? GasLimit { get; set; }
 
-        [Option("gas-price", SetName = "oldgas", Required = false, HelpText = "The desired GasPrice (e.g. 10_gwei)")]
+        [Option("gas-price", SetName = "oldgas", Required = false, HelpText = "The desired GasPrice (e.g. 10.5_gwei)")]
         public EtherValue? GasPrice { get; set; }
 
-        [Option("maxFeePerGas", SetName = "newgas", Required = false, HelpText = "The desired MaxFeePerGas (e.g. 10_gwei)")]
+        [Option("maxFeePerGas", SetName = "newgas", Required = false, HelpText = "The desired MaxFeePerGas (e.g. 10.5_gwei)")]
         public EtherValue? MaxFeePerGas { get; set; }
-        [Option("maxPriorityFeePerGas", SetName = "newgas", Required = false, HelpText = "The desired MaxPriorityFeePerGas (e.g. 10_gwei)")]
+        [Option("maxPriorityFeePerGas", SetName = "newgas", Required = false, HelpText = "The desired MaxPriorityFeePerGas (e.g. 10.5_gwei)")]
         public EtherValue? MaxPriorityFeePerGas { get; set; }
 
         [Option("private-key", Env = "WEB3_PRIVATE_KEY", Required = true, HelpText = "The private key [$WEB3_PRIVATE_KEY]")]

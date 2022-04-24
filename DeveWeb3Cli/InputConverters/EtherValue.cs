@@ -1,4 +1,6 @@
-﻿using Nethereum.Hex.HexTypes;
+﻿using DeveWeb3Cli.Helpers;
+using Nethereum.Hex.HexTypes;
+using Nethereum.Util;
 using Nethereum.Web3;
 using System.Numerics;
 using static Nethereum.Util.UnitConversion;
@@ -34,6 +36,7 @@ namespace DeveWeb3Cli.InputConverters
 
         public EtherValue(string data)
         {
+            
             var arguments = data.Split('_', StringSplitOptions.RemoveEmptyEntries);
 
             var ethValue = arguments.First();
@@ -43,7 +46,7 @@ namespace DeveWeb3Cli.InputConverters
                 ethUnit = arguments[1];
             }
 
-            if (BigInteger.TryParse(ethValue, out var resultParseGasPrice))
+            if (BigDecimalTryParse.TryParse(ethValue, out var resultParseGasPrice))
             {
                 var desiredEthUnit = Enum.GetValues<EthUnit>().Where(t => t.ToString().Equals(ethUnit, StringComparison.OrdinalIgnoreCase)).ToList();
 
