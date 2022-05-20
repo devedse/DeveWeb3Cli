@@ -92,7 +92,7 @@ jobs:
     - name: dotnet build
       run: dotnet build DeveWeb3Cli.sln -c Release --no-restore /p:Version=1.0.${{needs.generate_version_number.outputs.build_number}}
     - name: dotnet build wasm
-      run: dotnet publish DeveWeb3Cli\DeveWeb3Cli.csproj -r browser-wasm -c Debug /p:TargetArchitecture=wasm /p:PlatformTarget=AnyCPU /p:MSBuildEnableWorkloadResolver=false --self-contained
+      run: dotnet publish DeveWeb3Cli/DeveWeb3Cli.csproj -r browser-wasm -c Debug /p:TargetArchitecture=wasm /p:PlatformTarget=AnyCPU /p:MSBuildEnableWorkloadResolver=false --self-contained
     # - name: dotnet test
     #   run: dotnet test DeveWeb3Cli.sln -c Release --no-build --verbosity normal
 
