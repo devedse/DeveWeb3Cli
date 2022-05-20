@@ -23,7 +23,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="Nethereum.Web3" Version="4.3.0" />
     <PackageReference Include="Ninject" Version="3.3.5" />
-    <PackageReference Include="Wasi.Sdk" Version="0.1.0" />
   </ItemGroup>
 
 </Project>

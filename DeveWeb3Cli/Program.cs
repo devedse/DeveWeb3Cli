@@ -8,20 +8,20 @@ namespace DeveWeb3Cli
 {
     public class Program
     {
-        private IKernel kernel;
+        //private IKernel kernel;
         private int returnValue;
 
         public static Task<int> Main(string[] args)
         {
-            var program = new Program();
-            return program.ProcessCommandLineArguments(args);
+            var data = File.ReadAllText(@"DeveWeb3Cli.runtimeconfig.json");
+            return Task.FromResult(1);
         }
 
         public Program()
         {
             // Composition root is here... we load the injector and modules
             // Business behavior is determined by modules, so commands stay loosely coupled.
-            kernel = new StandardKernel(new AppModule());
+            //kernel = new StandardKernel(new AppModule());
         }
 
         private async Task<int> ProcessCommandLineArguments(string[] args)
@@ -33,13 +33,13 @@ namespace DeveWeb3Cli
             }
             finally
             {
-                kernel.Dispose();
+                //kernel.Dispose();
             }
         }
-
+        
         private async Task ProcessArgs(IEnumerable<string> args)
         {
-            //args = new List<string>() { "contract", "deploy", "--value", "10_gwei", "--private-key", "blah", "--rpc-url", "blah", "blah.bin" };
+            args = new List<string>() { "contract", "deploy", "--value", "10_gwei", "--private-key", "blah", "--rpc-url", "blah", @"C:\TheFolder\test.txt" };
 
             try
             {
@@ -62,8 +62,18 @@ namespace DeveWeb3Cli
             {
                 command = (CommandBase)arg;
 
+                var members = command.GetType().GetMembers();
+
+                foreach(var member in members)
+                {
+                    var found = member.GetCustomAttributes(typeof(InjectAttribute), true);
+                    if (found.Length > 0)
+                    {
+                        var blah = found.GetType();
+                    }
+                }
                 // The kernel will inject dependencies to the command.
-                kernel.Inject(command);
+                //kernel.Inject(command);
             }
             catch (Exception ex)
             {
