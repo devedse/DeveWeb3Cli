@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParserWithEnvironmentVariables" Version="2.8.2" />
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="7.0.0-alpha.1.22074.1" />
     <PackageReference Include="Microsoft.DotNet.ILCompiler.LLVM" Version="7.0.0-alpha.1.22251.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
@@ -25,7 +24,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="Nethereum.Web3" Version="4.3.0" />
     <PackageReference Include="Ninject" Version="3.3.5" />
-    <PackageReference Include="runtime.win-x64.Microsoft.DotNet.ILCompiler.LLVM" Version="7.0.0-alpha.1.22251.1" />
+    <PackageReference Include="runtime.browser-wasm.Microsoft.DotNet.ILCompiler.LLVM" Version="7.0.0-alpha.1.22251.1" />
   </ItemGroup>
 
 </Project>
