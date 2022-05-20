@@ -25,6 +25,7 @@
     <PackageReference Include="Nethereum.Web3" Version="4.3.0" />
     <PackageReference Include="Ninject" Version="3.3.5" />
     <PackageReference Include="runtime.browser-wasm.Microsoft.DotNet.ILCompiler.LLVM" Version="7.0.0-alpha.1.22251.1" />
+    <PackageReference Include="runtime.linux-x64.Microsoft.DotNet.ILCompiler.LLVM" Version="7.0.0-alpha.1.22251.1" />
   </ItemGroup>
 
 </Project>
