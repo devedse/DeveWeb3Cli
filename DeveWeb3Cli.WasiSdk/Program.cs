@@ -6,8 +6,6 @@
         {
             Console.WriteLine($"Hello this is compiled code from WASM, I can do calculations: {new Random().Next()}");
 
-            return Task.FromResult(1);
-
             return DeveWeb3Cli.Program.Main(args);
         }
     }
