@@ -88,8 +88,8 @@ jobs:
     #   with:
     #     dotnet-version: 7.0.x
     #     include-prerelease: true
-    - name: Coole Jesse Auto Install shit
-      run: dotnet workload install
+    - name: Coole Jesse Auto Restore shit
+      run: dotnet workload restore
     - name: dotnet restore
       run: dotnet restore DeveWeb3Cli.sln
     - name: dotnet build
@@ -107,8 +107,8 @@ jobs:
     #   with:
     #     dotnet-version: 7.0.x
     #     include-prerelease: true
-    - name: Coole Jesse Auto Install shit
-      run: dotnet workload install
+    - name: Coole Jesse Auto Restore shit
+      run: dotnet workload restore
     - name: dotnet restore
       run: dotnet restore DeveWeb3Cli.sln
     - name: dotnet build
