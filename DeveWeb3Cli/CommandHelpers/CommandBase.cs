@@ -22,7 +22,7 @@ namespace DeveWeb3Cli.CommandHelpers
         [Option('v', "verbose", HelpText = "Print details during execution.")]
         public bool Verbose { get; set; }
 
-        [Option('n', "network", Env = "WEB3_NETWORK", Default = "1337", HelpText = "The name of the network. Options: <chainId>, MainNet, Morden, Ropsten, Rinkeby, RootstockMainNet, RootstockTestNet, Kovan, ClassicMainNet, ClassicTestNet, Private. (default: \"1337\") [$WEB3_NETWORK]")]
+        [Option('n', "network", Env = "WEB3_NETWORK", Default = "1337", HelpText = "The name of the network. Options: <chainId>, MainNet, Morden, Ropsten, Sepolia, Rinkeby, RootstockMainNet, RootstockTestNet, Kovan, ClassicMainNet, ClassicTestNet, Private. (default: \"1337\") [$WEB3_NETWORK]")]
         public string Network { get; set; } = null!;
 
         protected int GetChainId()
